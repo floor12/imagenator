@@ -7,6 +7,7 @@ use floor12\imagenator\exception\ImageNotFoundException;
 use floor12\imagenator\exception\InvalidFontSizeException as InvalidFontSizeExceptionAlias;
 use floor12\imagenator\exception\InvalidHexColorException;
 use floor12\imagenator\exception\InvalidPositionValueException;
+use floor12\imagenator\exception\InvalidRowHeightException;
 use floor12\imagenator\exception\InvalidWordPerPageException;
 
 class Imagenator
@@ -35,11 +36,11 @@ class Imagenator
     /**
      * @var int
      */
-    protected $wordsPerPage = 7;
+    protected $wordsPerRow = 7;
     /**
      * @var int
      */
-    protected $stringHeight = 8;
+    protected $rowHeight = 8;
     /**
      * @var int
      */
@@ -108,14 +109,14 @@ class Imagenator
             throw new FontNotFoundException();
 
         $wordsArray = explode(' ', $this->text);
-        $strings = array_chunk($wordsArray, $this->wordsPerPage);
+        $strings = array_chunk($wordsArray, $this->wordsPerRow);
         $positionStartY = $this->imageHeight / 100 * $this->textPositionPercentY;
-        $stringHeightInPx = $this->imageHeight / 100 * $this->stringHeight;
+        $rowHeightInPx = $this->imageHeight / 100 * $this->rowHeight;
         $fontSizeInPx = $this->imageHeight / 100 * $this->fontSizeInPercents;
         $positionX = $this->imageWidth / 100 * $this->textPositionPercentX;
         foreach ($strings as $stringNumber => $wordsArray) {
             $string = implode(' ', $wordsArray);
-            $positionY = $positionStartY + $stringNumber * $stringHeightInPx;
+            $positionY = $positionStartY + $stringNumber * $rowHeightInPx;
             imagettftext($this->image, $fontSizeInPx, 0, $positionX, $positionY, $this->textColor, $this->font, $string);
         }
 
@@ -174,15 +175,15 @@ class Imagenator
     }
 
     /**
-     * @param int $wordsPerPage
+     * @param int $wordsPerRow
      * @return Imagenator
      * @throws InvalidWordPerPageException
      */
-    public function setWordsPerPage(int $wordsPerPage)
+    public function setWordsPerRow(int $wordsPerRow)
     {
-        if ($wordsPerPage < 1 || $wordsPerPage > 30)
+        if ($wordsPerRow < 1 || $wordsPerRow > 30)
             throw new InvalidWordPerPageException();
-        $this->wordsPerPage = $wordsPerPage;
+        $this->wordsPerRow = $wordsPerRow;
         return $this;
     }
 

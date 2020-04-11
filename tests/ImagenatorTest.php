@@ -6,6 +6,7 @@ use floor12\imagenator\exception\FontNotFoundException;
 use floor12\imagenator\exception\InvalidFontSizeException;
 use floor12\imagenator\exception\InvalidHexColorException;
 use floor12\imagenator\exception\InvalidPositionValueException;
+use floor12\imagenator\exception\InvalidRowHeightException;
 use floor12\imagenator\exception\InvalidWordPerPageException;
 use floor12\imagenator\Imagenator;
 use PHPUnit\Framework\TestCase;
@@ -105,26 +106,26 @@ class ImagenatorTest extends TestCase
     }
 
 
-    public function testSetWordsPerPage()
+    public function testSetWordsPerRow()
     {
         $this->unlinkTestOutputImage();
         $this->imaginator = new Imagenator();
         $this->imaginator
             ->setText($this->testText)
-            ->setWordsPerPage(2);
+            ->setWordsPerRow(2);
         $this->imaginator->generate($this->outputImage);
         $this->checkFileGenerated();
     }
 
 
-    public function testInvalidWordsPerPage()
+    public function testInvalidWordsPerRow()
     {
         $this->expectException(InvalidWordPerPageException::class);
         $this->unlinkTestOutputImage();
         $this->imaginator = new Imagenator();
         $this->imaginator
             ->setText($this->testText)
-            ->setWordsPerPage(200);
+            ->setWordsPerRow(200);
         $this->imaginator->generate($this->outputImage);
     }
 
@@ -152,6 +153,30 @@ class ImagenatorTest extends TestCase
             ->setPositionY(70);
         $this->imaginator->generate($this->outputImage);
     }
+
+    public function testSetRowHeight()
+    {
+        $this->unlinkTestOutputImage();
+        $this->imaginator = new Imagenator();
+        $this->imaginator
+            ->setText($this->testText)
+            ->setRowHeight(20);
+        $this->imaginator->generate($this->outputImage);
+        $this->checkFileGenerated();
+    }
+
+    public function testInvalidRowHeight()
+    {
+        $this->expectException(InvalidRowHeightException::class);
+        $this->unlinkTestOutputImage();
+        $this->imaginator = new Imagenator();
+        $this->imaginator
+            ->setText($this->testText)
+            ->setRowHeight(100);
+        $this->imaginator->generate($this->outputImage);
+        $this->checkFileGenerated();
+    }
+
 
     protected function unlinkTestOutputImage()
     {

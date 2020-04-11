@@ -1,12 +1,12 @@
 {
   "name": "floor12/imagenator",
-  "description": "PHP library for generate image with a article title to use it in OpenGraph",
+  "type": "library",
+  "description": "PHP library for generate image with a article title to use it in OpenGraph.",
   "license": "MIT",
   "authors": [
     {
       "name": "floor12",
       "email": "floor12@floor12.net",
-      "role": "Developer"
     }
   ],
   "require-dev": {
