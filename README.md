@@ -37,12 +37,12 @@ Then, you can setup any of additional parameters using some setters:
 $imagenator
     ->setColor('FF04AB')                    // Font color in HEX format;
     ->setFont('/fonts/SomeFont.ttf')        // Path to custom font;
-    ->setFontSize('3')                      // Font size in percent of image height;
+    ->setFontSize(3)                        // Font size in percent of image height;
     ->setPositionX(5)                       // Horizontal text position in percent of image width;
     ->setPositionY(50)                      // Vertical text position in percent of image height;
     ->setRowHeight(7)                       // Row height in percent of image height;
-    ->setText('This is an article title.')  // Text to put over the image;
-    ->setWordsPerRow(4);                    // Words number per row;
+    ->setWordsPerRow(4)                     // Words number per row;
+    ->setText('This is an article title.'); // Text to put over the image;
 ```
 
 After that, you can generate result PNG image:
