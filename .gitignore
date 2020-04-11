@@ -1,0 +1,10 @@
+.idea
+.buildpath
+.project
+.settings
+nbproject
+Thumbs.db
+vendor
+composer.phar
+.DS_Store
+composer.lock
