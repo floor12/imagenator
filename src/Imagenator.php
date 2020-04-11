@@ -211,4 +211,17 @@ class Imagenator
         $this->textPositionPercentY = $percent;
         return $this;
     }
+
+    /**
+     * @param int $percent
+     * @return Imagenator
+     * @throws InvalidRowHeightException
+     */
+    public function setRowHeight(int $percent)
+    {
+        if ($percent < 1 || $percent > 30)
+            throw new InvalidRowHeightException();
+        $this->rowHeight = $percent;
+        return $this;
+    }
 }
