@@ -1,9 +1,10 @@
 
 # floor12/imagenator
 
-
 [![Build Status](https://travis-ci.org/floor12/imagenator.svg?branch=master)](https://travis-ci.org/floor12/imagenator.svg?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/floor12/imagenator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/floor12/imagenator/?branch=master)
+
+*Этот файл доступен на [русском языке](README_RU.md).*
 
 ## Description
 
@@ -17,9 +18,9 @@ For example:
 
 ![FileInputWidget](https://raw.githubusercontent.com/floor12/imagenator/master/tests/data/example2.png)
 
-*Этот файл доступен на [русском языке](README_RU.md).*
 
 ## Installation
+
 
 Add this library to your project
 
