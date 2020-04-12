@@ -9,7 +9,13 @@
 
 PHP library for generate image with a article title to use it in OpenGraph. 
 It takes PNG image is a background and put text on it. The text position, size, font, color and other
-parameters 
+parameters.
+
+For example:
+
+![FileInputWidget](https://raw.githubusercontent.com/floor12/imagenator/master/tests/data/example1.png)
+
+![FileInputWidget](https://raw.githubusercontent.com/floor12/imagenator/master/tests/data/example2.png)
 
 ## Installation
 
