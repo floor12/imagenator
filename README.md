@@ -10,7 +10,8 @@
 
 PHP library for generate image with a article title to use it in OpenGraph. 
 It takes PNG image is a background and put text on it. The text position, size, font, color and other
-parameters.
+parameters. In addition, the library correctly processes "hanging prepositions": it wrap words shorter than 3 letters to
+ the next line, if it exists.
 
 For example:
 

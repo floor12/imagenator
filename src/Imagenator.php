@@ -109,12 +109,27 @@ class Imagenator
             throw new FontNotFoundException();
 
         $wordsArray = explode(' ', $this->text);
-        $strings = array_chunk($wordsArray, $this->wordsPerRow);
+        $rows = array_chunk($wordsArray, $this->wordsPerRow);
         $positionStartY = $this->imageHeight / 100 * $this->textPositionPercentY;
         $rowHeightInPx = $this->imageHeight / 100 * $this->rowHeight;
         $fontSizeInPx = $this->imageHeight / 100 * $this->fontSizeInPercents;
         $positionX = $this->imageWidth / 100 * $this->textPositionPercentX;
-        foreach ($strings as $stringNumber => $wordsArray) {
+        $lastRowNumber = sizeof($rows) - 1;
+        $wordToWrap = '';
+
+        foreach ($rows as $stringNumber => $wordsArray) {
+            $lastWordInRow = $wordsArray[sizeof($wordsArray) - 1];
+            $lastWordInRowLength = strlen($lastWordInRow);
+
+            if (!empty($wordToWrap)) {
+                array_unshift($wordsArray, $wordToWrap);
+                $wordToWrap = '';
+            }
+
+            if ($lastWordInRowLength <= 2 && $stringNumber != $lastRowNumber) {
+                $wordToWrap = array_pop($wordsArray);
+            }
+
             $string = implode(' ', $wordsArray);
             $positionY = $positionStartY + $stringNumber * $rowHeightInPx;
             imagettftext($this->image, $fontSizeInPx, 0, $positionX, $positionY, $this->textColor, $this->font, $string);
