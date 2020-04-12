@@ -1,5 +1,5 @@
 
-# floor12/imaginator
+# floor12/imagenator
 
 
 [![Build Status](https://travis-ci.org/floor12/imagenator.svg?branch=master)](https://travis-ci.org/floor12/imagenator.svg?branch=master)
@@ -17,16 +17,18 @@ For example:
 
 ![FileInputWidget](https://raw.githubusercontent.com/floor12/imagenator/master/tests/data/example2.png)
 
+*Этот файл доступен на [русском языке](README_RU.md).*
+
 ## Installation
 
 Add this library to your project
 
  ```bash
- $ composer require floor12/imaginator
+ $ composer require floor12/imagenator
  ```
 or add this to the `require` section of your composer.json.
  ```json
- "floor12/imaginator": "dev-master"
+ "floor12/imagenator": "dev-master"
  ```
 
 ## Using
