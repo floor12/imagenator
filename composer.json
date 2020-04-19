@@ -21,5 +21,8 @@
     "psr-4": {
       "floor12\\imagenator\\tests\\": "tests/"
     }
+  },
+  "require": {
+    "ext-gd": "*"
   }
 }

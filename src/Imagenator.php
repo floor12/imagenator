@@ -4,7 +4,7 @@ namespace floor12\imagenator;
 
 use floor12\imagenator\exception\FontNotFoundException;
 use floor12\imagenator\exception\ImageNotFoundException;
-use floor12\imagenator\exception\InvalidFontSizeException as InvalidFontSizeExceptionAlias;
+use floor12\imagenator\exception\InvalidFontSizeException;
 use floor12\imagenator\exception\InvalidHexColorException;
 use floor12\imagenator\exception\InvalidPositionValueException;
 use floor12\imagenator\exception\InvalidRowHeightException;
@@ -36,19 +36,15 @@ class Imagenator
     /**
      * @var int
      */
-    protected $wordsPerRow = 7;
-    /**
-     * @var int
-     */
     protected $rowHeight = 8;
     /**
      * @var int
      */
-    protected $textPositionPercentY = 50;
+    protected $marginTopInPercents = 50;
     /**
      * @var int
      */
-    protected $textPositionPercentX = 5;
+    protected $paddingLeftRightInPercents = 5;
     /**
      * @var int Default color is white
      */
@@ -57,6 +53,26 @@ class Imagenator
      * @var int
      */
     private $fontSizeInPercents = 5;
+    /**
+     * @var array
+     */
+    private $rows = [];
+    /**
+     * @var float|int
+     */
+    private $positionX;
+    /**
+     * @var float|int
+     */
+    private $positionStartY;
+    /**
+     * @var float|int
+     */
+    private $rowHeightInPx;
+    /**
+     * @var float|int
+     */
+    private $fontSizeInPx;
 
     /**
      * Imagenator constructor.
@@ -87,7 +103,9 @@ class Imagenator
      */
     public function generate(string $resultImagePath): bool
     {
-        $this->putTextToImage();
+        $this->calculateParams();
+        $this->prepareRows();
+        $this->putRowsToImage();
         return $this->saveImage($resultImagePath);
     }
 
@@ -100,48 +118,59 @@ class Imagenator
         return imagepng($this->image, $pathToSave) && imagedestroy($this->image);
     }
 
+    protected function calculateParams()
+    {
+        $this->positionStartY = $this->imageHeight / 100 * $this->marginTopInPercents;
+        $this->rowHeightInPx = $this->imageHeight / 100 * $this->rowHeight;
+        $this->fontSizeInPx = $this->imageHeight / 100 * $this->fontSizeInPercents;
+        $this->positionX = $this->imageWidth / 100 * $this->paddingLeftRightInPercents;
+    }
+
     /**
      * @throws FontNotFoundException
      */
-    protected function putTextToImage(): void
+    protected function prepareRows(): void
     {
         if (!file_exists($this->font))
             throw new FontNotFoundException();
 
         $wordsArray = explode(' ', $this->text);
-        $rows = array_chunk($wordsArray, $this->wordsPerRow);
-        $positionStartY = $this->imageHeight / 100 * $this->textPositionPercentY;
-        $rowHeightInPx = $this->imageHeight / 100 * $this->rowHeight;
-        $fontSizeInPx = $this->imageHeight / 100 * $this->fontSizeInPercents;
-        $positionX = $this->imageWidth / 100 * $this->textPositionPercentX;
-        $lastRowNumber = sizeof($rows) - 1;
-        $wordToWrap = '';
+        $validRowWidth = $this->imageWidth - $this->positionX * 2;
+        $currentRow = 0;
 
-        foreach ($rows as $stringNumber => $wordsArray) {
-            $lastWordInRow = $wordsArray[sizeof($wordsArray) - 1];
-            $lastWordInRowLength = strlen($lastWordInRow);
-
-            if (!empty($wordToWrap)) {
-                array_unshift($wordsArray, $wordToWrap);
-                $wordToWrap = '';
+        foreach ($wordsArray as $word) {
+            $testRow = isset($this->rows[$currentRow]) ? array_merge($this->rows[$currentRow], [$word]) : [$word];
+            $imageBox = imagettfbbox($this->fontSizeInPx, 0, $this->font, implode('', $testRow));
+            if ($imageBox[2] >= $validRowWidth) {
+                $lastWord = end($this->rows[$currentRow]);
+                if (mb_strlen($lastWord) <= 2) {
+                    $this->rows[$currentRow + 1][] = array_pop($this->rows[$currentRow]);
+                }
+                $this->rows[++$currentRow][] = $word;
+            } else {
+                $this->rows[$currentRow][] = $word;
             }
-
-            if ($lastWordInRowLength <= 2 && $stringNumber != $lastRowNumber) {
-                $wordToWrap = array_pop($wordsArray);
-            }
-
-            $string = implode(' ', $wordsArray);
-            $positionY = $positionStartY + $stringNumber * $rowHeightInPx;
-            imagettftext($this->image, $fontSizeInPx, 0, $positionX, $positionY, $this->textColor, $this->font, $string);
         }
+    }
 
+    /**
+     *
+     */
+    protected function putRowsToImage()
+    {
+        foreach ($this->rows as $rowNumber => $row) {
+            $string = implode(' ', $row);
+            $positionY = $this->positionStartY + ($rowNumber * $this->rowHeightInPx);
+            imagettftext($this->image, $this->fontSizeInPx, 0, $this->positionX, $positionY, $this->textColor, $this->font, $string);
+        }
     }
 
     /**
      * @param string $text
      * @return self
      */
-    public function setText(string $text): self
+    public
+    function setText(string $text): self
     {
         $this->text = $text;
         return $this;
@@ -151,7 +180,8 @@ class Imagenator
      * @param string $font
      * @return self
      */
-    public function setFont(string $font): self
+    public
+    function setFont(string $font): self
     {
         $this->font = $font;
         return $this;
@@ -162,7 +192,8 @@ class Imagenator
      * @return self
      * @throws InvalidHexColorException
      */
-    public function setColor(string $colorInHex): self
+    public
+    function setColor(string $colorInHex): self
     {
         $colorInHex = str_replace('#', '', $colorInHex);
 
@@ -179,12 +210,13 @@ class Imagenator
     /**
      * @param int $size
      * @return Imagenator
-     * @throws InvalidFontSizeExceptionAlias
+     * @throws InvalidFontSizeException
      */
-    public function setFontSize(int $size)
+    public
+    function setFontSize(int $size)
     {
         if ($size < 1 || $size > 20)
-            throw new InvalidFontSizeExceptionAlias();
+            throw new InvalidFontSizeException();
         $this->fontSizeInPercents = $size;
         return $this;
     }
@@ -194,7 +226,8 @@ class Imagenator
      * @return Imagenator
      * @throws InvalidWordPerPageException
      */
-    public function setWordsPerRow(int $wordsPerRow)
+    public
+    function setWordsPerRow(int $wordsPerRow)
     {
         if ($wordsPerRow < 1 || $wordsPerRow > 30)
             throw new InvalidWordPerPageException();
@@ -207,11 +240,12 @@ class Imagenator
      * @return Imagenator
      * @throws InvalidPositionValueException
      */
-    public function setPositionX(int $percent)
+    public
+    function setPadding(int $percent)
     {
         if ($percent < 1 || $percent > 100)
             throw new InvalidPositionValueException();
-        $this->textPositionPercentX = $percent;
+        $this->paddingLeftRightInPercents = $percent;
         return $this;
     }
 
@@ -220,11 +254,11 @@ class Imagenator
      * @return Imagenator
      * @throws InvalidPositionValueException
      */
-    public function setPositionY(int $percent)
+    public function setMarginTopInPercents(int $percent)
     {
         if ($percent < 1 || $percent > 100)
             throw new InvalidPositionValueException();
-        $this->textPositionPercentY = $percent;
+        $this->marginTopInPercents = $percent;
         return $this;
     }
 
@@ -233,7 +267,8 @@ class Imagenator
      * @return Imagenator
      * @throws InvalidRowHeightException
      */
-    public function setRowHeight(int $percent)
+    public
+    function setRowHeight(int $percent)
     {
         if ($percent < 1 || $percent > 30)
             throw new InvalidRowHeightException();

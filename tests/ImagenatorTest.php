@@ -135,22 +135,32 @@ class ImagenatorTest extends TestCase
         $this->imaginator = new Imagenator();
         $this->imaginator
             ->setText($this->testText)
-            ->setPositionX(70)
-            ->setPositionY(70);
+            ->setMarginTopInPercents(20)
+            ->setPadding(10);
         $this->imaginator->generate($this->outputImage);
         $this->checkFileGenerated();
     }
 
 
-    public function testInvalidPosition()
+    public function testInvalidPadding()
     {
         $this->expectException(InvalidPositionValueException::class);
         $this->unlinkTestOutputImage();
         $this->imaginator = new Imagenator();
         $this->imaginator
             ->setText($this->testText)
-            ->setPositionX(101)
-            ->setPositionY(70);
+            ->setPadding(101);
+        $this->imaginator->generate($this->outputImage);
+    }
+
+    public function testInvalidTopMargin()
+    {
+        $this->expectException(InvalidPositionValueException::class);
+        $this->unlinkTestOutputImage();
+        $this->imaginator = new Imagenator();
+        $this->imaginator
+            ->setText($this->testText)
+            ->setMarginTopInPercents(120);
         $this->imaginator->generate($this->outputImage);
     }
 
@@ -173,6 +183,20 @@ class ImagenatorTest extends TestCase
         $this->imaginator
             ->setText($this->testText)
             ->setRowHeight(100);
+        $this->imaginator->generate($this->outputImage);
+        $this->checkFileGenerated();
+    }
+
+    public function testSbc()
+    {
+        $this->unlinkTestOutputImage();
+        $this->imaginator = new Imagenator();
+        $this->imaginator
+            ->setText('Можно написать текст красивым по шрифтом, это будет выглядеть интересно!')
+            ->setFontSize(7)
+            ->setRowHeight(12)
+            ->setFont(__DIR__ . '/../assets/Pacifico.ttf')
+            ->setWordsPerRow(4);
         $this->imaginator->generate($this->outputImage);
         $this->checkFileGenerated();
     }

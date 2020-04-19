@@ -42,14 +42,14 @@ $imagenator = new Imagenator('/project/images/image.png');
 После этого, вы можете задать необходимые параметры используя сеттеры:
 ```php
 $imagenator
-    ->setColor('FF04AB')                    // Font color in HEX format;
-    ->setFont('/fonts/SomeFont.ttf')        // Path to custom font;
-    ->setFontSize(3)                        // Font size in percent of image height;
-    ->setPositionX(5)                       // Horizontal text position in percent of image width;
-    ->setPositionY(50)                      // Vertical text position in percent of image height;
-    ->setRowHeight(7)                       // Row height in percent of image height;
-    ->setWordsPerRow(4)                     // Words number per row;
-    ->setText('This is an article title.'); // Text to put over the image;
+    ->setColor('FF04AB')                    // Цвет текста в HEX;
+    ->setFont('/fonts/SomeFont.ttf')        // Путь к шрифту;
+    ->setFontSize(3)                        // Размер шрифта в процентах от высото изображения;
+    ->setPositionX(5)                       // Позиция по оси X в процентах от высото изображения;
+    ->setPositionY(50)                      // Позиция по оси Y в процентах от высото изображения;
+    ->setRowHeight(7)                       // Высота строк в процентах от высото изображения;
+    ->setWordsPerRow(4)                     // Максимальное количество слов в строке
+    ->setText('This is an article title.'); // Текст, который необходимо поместить на изображения
 ```
 Далее можно сохранить результат в виде PNG изображения:
 ```php
