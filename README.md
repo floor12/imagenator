@@ -48,10 +48,9 @@ $imagenator
     ->setColor('FF04AB')                    // Font color in HEX format;
     ->setFont('/fonts/SomeFont.ttf')        // Path to custom font;
     ->setFontSize(3)                        // Font size in percent of image height;
-    ->setPositionX(5)                       // Horizontal text position in percent of image width;
-    ->setPositionY(50)                      // Vertical text position in percent of image height;
+    ->setPadding(5)                         // Horizontal padding in percent of image width;
+    ->setMarginTopInPercents(50)            // Margin from top image edge in percent of image height;
     ->setRowHeight(7)                       // Row height in percent of image height;
-    ->setWordsPerRow(4)                     // Words number per row;
     ->setText('This is an article title.'); // Text to put over the image;
 ```
 
