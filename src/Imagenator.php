@@ -4,6 +4,7 @@ namespace floor12\imagenator;
 
 use floor12\imagenator\exception\FontNotFoundException;
 use floor12\imagenator\exception\ImageNotFoundException;
+use floor12\imagenator\exception\ImageNotLoadedException;
 use floor12\imagenator\exception\InvalidFontSizeException;
 use floor12\imagenator\exception\InvalidHexColorException;
 use floor12\imagenator\exception\InvalidPositionValueException;
@@ -21,7 +22,7 @@ class Imagenator
      */
     protected $text = "Dont forget to put some text here :-)";
     /**
-     * @var false|resource
+     * @var resource
      */
     protected $image;
     /**
@@ -86,12 +87,15 @@ class Imagenator
     /**
      * @param string $backgroundImagePath
      * @throws ImageNotFoundException
+     * @throws ImageNotLoadedException
      */
     protected function loadImage(string $backgroundImagePath)
     {
         if (!file_exists($backgroundImagePath))
             throw new ImageNotFoundException();
         $this->image = imagecreatefrompng($backgroundImagePath);
+        if ($this->image == null)
+            throw new ImageNotLoadedException();
         list($this->imageWidth, $this->imageHeight) = getimagesize($backgroundImagePath);
     }
 
@@ -119,10 +123,10 @@ class Imagenator
 
     protected function calculateParams()
     {
-        $this->positionStartY = (int)($this->imageHeight / 100 * $this->marginTopInPercents);
-        $this->rowHeightInPx = (int)($this->imageHeight / 100 * $this->rowHeight);
-        $this->fontSizeInPx = (int)($this->imageHeight / 100 * $this->fontSizeInPercents);
-        $this->positionX = (int)($this->imageWidth / 100 * $this->paddingLeftRightInPercents);
+        $this->positionStartY = intval($this->imageHeight / 100 * $this->marginTopInPercents);
+        $this->rowHeightInPx = intval($this->imageHeight / 100 * $this->rowHeight);
+        $this->fontSizeInPx = intval($this->imageHeight / 100 * $this->fontSizeInPercents);
+        $this->positionX = intval($this->imageWidth / 100 * $this->paddingLeftRightInPercents);
     }
 
     /**
@@ -159,7 +163,7 @@ class Imagenator
     {
         foreach ($this->rows as $rowNumber => $row) {
             $string = implode(' ', $row);
-            $positionY = (int)$this->positionStartY + ($rowNumber * $this->rowHeightInPx);
+            $positionY = intval($this->positionStartY + ($rowNumber * $this->rowHeightInPx));
             imagettftext($this->image, $this->fontSizeInPx, 0, $this->positionX, $positionY, $this->textColor, $this->font, $string);
         }
     }
@@ -199,9 +203,9 @@ class Imagenator
         if (!ctype_xdigit($colorInHex) || strlen($colorInHex) !== 6)
             throw new InvalidHexColorException();
 
-        $red = hexdec(substr($colorInHex, 0, 2));
-        $green = hexdec(substr($colorInHex, 2, 2));
-        $blue = hexdec(substr($colorInHex, 4, 2));
+        $red = intval(hexdec(substr($colorInHex, 0, 2))));
+        $green = intval(hexdec(substr($colorInHex, 2, 2)));
+        $blue = intval(hexdec(substr($colorInHex, 4, 2)));
         $this->textColor = imagecolorallocate($this->image, $red, $green, $blue);
         return $this;
     }
