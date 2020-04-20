@@ -8,7 +8,6 @@ use floor12\imagenator\exception\InvalidFontSizeException;
 use floor12\imagenator\exception\InvalidHexColorException;
 use floor12\imagenator\exception\InvalidPositionValueException;
 use floor12\imagenator\exception\InvalidRowHeightException;
-use floor12\imagenator\exception\InvalidWordPerPageException;
 
 class Imagenator
 {
@@ -120,10 +119,10 @@ class Imagenator
 
     protected function calculateParams()
     {
-        $this->positionStartY = $this->imageHeight / 100 * $this->marginTopInPercents;
-        $this->rowHeightInPx = $this->imageHeight / 100 * $this->rowHeight;
-        $this->fontSizeInPx = $this->imageHeight / 100 * $this->fontSizeInPercents;
-        $this->positionX = $this->imageWidth / 100 * $this->paddingLeftRightInPercents;
+        $this->positionStartY = (int)($this->imageHeight / 100 * $this->marginTopInPercents);
+        $this->rowHeightInPx = (int)($this->imageHeight / 100 * $this->rowHeight);
+        $this->fontSizeInPx = (int)($this->imageHeight / 100 * $this->fontSizeInPercents);
+        $this->positionX = (int)($this->imageWidth / 100 * $this->paddingLeftRightInPercents);
     }
 
     /**
@@ -160,7 +159,7 @@ class Imagenator
     {
         foreach ($this->rows as $rowNumber => $row) {
             $string = implode(' ', $row);
-            $positionY = $this->positionStartY + ($rowNumber * $this->rowHeightInPx);
+            $positionY = (int)$this->positionStartY + ($rowNumber * $this->rowHeightInPx);
             imagettftext($this->image, $this->fontSizeInPx, 0, $this->positionX, $positionY, $this->textColor, $this->font, $string);
         }
     }

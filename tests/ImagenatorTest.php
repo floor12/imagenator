@@ -105,30 +105,6 @@ class ImagenatorTest extends TestCase
         $this->imaginator->generate($this->outputImage);
     }
 
-
-    public function testSetWordsPerRow()
-    {
-        $this->unlinkTestOutputImage();
-        $this->imaginator = new Imagenator();
-        $this->imaginator
-            ->setText($this->testText)
-            ->setWordsPerRow(2);
-        $this->imaginator->generate($this->outputImage);
-        $this->checkFileGenerated();
-    }
-
-
-    public function testInvalidWordsPerRow()
-    {
-        $this->expectException(InvalidWordPerPageException::class);
-        $this->unlinkTestOutputImage();
-        $this->imaginator = new Imagenator();
-        $this->imaginator
-            ->setText($this->testText)
-            ->setWordsPerRow(200);
-        $this->imaginator->generate($this->outputImage);
-    }
-
     public function testSetPosition()
     {
         $this->unlinkTestOutputImage();
@@ -195,8 +171,7 @@ class ImagenatorTest extends TestCase
             ->setText('Можно написать текст красивым по шрифтом, это будет выглядеть интересно!')
             ->setFontSize(7)
             ->setRowHeight(12)
-            ->setFont(__DIR__ . '/../assets/Pacifico.ttf')
-            ->setWordsPerRow(4);
+            ->setFont(__DIR__ . '/../assets/Pacifico.ttf');
         $this->imaginator->generate($this->outputImage);
         $this->checkFileGenerated();
     }
