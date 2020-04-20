@@ -58,19 +58,19 @@ class Imagenator
      */
     private $rows = [];
     /**
-     * @var float|int
+     * @var int
      */
     private $positionX;
     /**
-     * @var float|int
+     * @var int
      */
     private $positionStartY;
     /**
-     * @var float|int
+     * @var int
      */
     private $rowHeightInPx;
     /**
-     * @var float|int
+     * @var int
      */
     private $fontSizeInPx;
 
