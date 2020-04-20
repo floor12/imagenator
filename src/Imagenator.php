@@ -203,7 +203,7 @@ class Imagenator
         if (!ctype_xdigit($colorInHex) || strlen($colorInHex) !== 6)
             throw new InvalidHexColorException();
 
-        $red = intval(hexdec(substr($colorInHex, 0, 2))));
+        $red = intval(hexdec(substr($colorInHex, 0, 2)));
         $green = intval(hexdec(substr($colorInHex, 2, 2)));
         $blue = intval(hexdec(substr($colorInHex, 4, 2)));
         $this->textColor = imagecolorallocate($this->image, $red, $green, $blue);
