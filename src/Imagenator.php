@@ -222,20 +222,6 @@ class Imagenator
     }
 
     /**
-     * @param int $wordsPerRow
-     * @return Imagenator
-     * @throws InvalidWordPerPageException
-     */
-    public
-    function setWordsPerRow(int $wordsPerRow)
-    {
-        if ($wordsPerRow < 1 || $wordsPerRow > 30)
-            throw new InvalidWordPerPageException();
-        $this->wordsPerRow = $wordsPerRow;
-        return $this;
-    }
-
-    /**
      * @param int $percent
      * @return Imagenator
      * @throws InvalidPositionValueException
